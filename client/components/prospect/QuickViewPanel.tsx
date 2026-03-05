@@ -300,7 +300,7 @@ export const QuickViewPanel: React.FC<QuickViewPanelProps> = ({
             <div>
               <div className="flex items-center gap-2 mb-2">
                 <Briefcase className="w-4 h-4 text-gray-600" />
-                <p className="text-xs text-gray-600 font-semibold">Description</p>
+                <p className="text-xs text-gray-500 font-semibold uppercase">Description</p>
               </div>
               <p className="text-sm text-gray-700 ml-6">
                 {prospect.companyName} Health Solutions, founded in 2001 and headquartered in Fort Lauderdale, Florida...
@@ -315,7 +315,7 @@ export const QuickViewPanel: React.FC<QuickViewPanelProps> = ({
               <div>
                 <div className="flex items-center gap-2 mb-2">
                   <MapPin className="w-4 h-4 text-gray-600" />
-                  <p className="text-xs text-gray-600 font-semibold">HQ Location</p>
+                  <p className="text-xs text-gray-500 font-semibold uppercase">HQ Location</p>
                 </div>
                 <div className="flex items-start justify-between gap-2 ml-6">
                   <p className="text-sm text-gray-700">
@@ -331,7 +331,7 @@ export const QuickViewPanel: React.FC<QuickViewPanelProps> = ({
               <div>
                 <div className="flex items-center gap-2 mb-2">
                   <Users className="w-4 h-4 text-gray-600" />
-                  <p className="text-xs text-gray-600 font-semibold">Employees</p>
+                  <p className="text-xs text-gray-500 font-semibold uppercase">Employees</p>
                 </div>
                 <p className="text-sm text-blue-600 font-medium ml-6">{prospect.companySize}</p>
               </div>
@@ -342,7 +342,7 @@ export const QuickViewPanel: React.FC<QuickViewPanelProps> = ({
               <div>
                 <div className="flex items-center gap-2 mb-2">
                   <DollarSign className="w-4 h-4 text-gray-600" />
-                  <p className="text-xs text-gray-600 font-semibold">Revenue</p>
+                  <p className="text-xs text-gray-500 font-semibold uppercase">Revenue</p>
                 </div>
                 <p className="text-sm text-gray-900 font-medium ml-6">{prospect.revenue}</p>
               </div>
@@ -353,7 +353,7 @@ export const QuickViewPanel: React.FC<QuickViewPanelProps> = ({
               <div>
                 <div className="flex items-center gap-2 mb-2">
                   <Briefcase className="w-4 h-4 text-gray-600" />
-                  <p className="text-xs text-gray-600 font-semibold">Industry</p>
+                  <p className="text-xs text-gray-500 font-semibold uppercase">Industry</p>
                 </div>
                 <div className="ml-6 space-y-1">
                   <p className="text-xs text-gray-600">Primary Industries</p>
@@ -368,7 +368,7 @@ export const QuickViewPanel: React.FC<QuickViewPanelProps> = ({
             <div>
               <div className="flex items-center gap-2 mb-2">
                 <Globe className="w-4 h-4 text-gray-600" />
-                <p className="text-xs text-gray-600 font-semibold">Technologies</p>
+                <p className="text-xs text-gray-500 font-semibold uppercase">Technologies</p>
               </div>
               <div className="ml-6 space-y-1">
                 <p className="text-sm text-gray-700">
@@ -385,7 +385,7 @@ export const QuickViewPanel: React.FC<QuickViewPanelProps> = ({
               <div>
                 <div className="flex items-center gap-2 mb-2">
                   <Phone className="w-4 h-4 text-gray-600" />
-                  <p className="text-xs text-gray-600 font-semibold">HQ Phone</p>
+                  <p className="text-xs text-gray-500 font-semibold uppercase">HQ Phone</p>
                 </div>
                 <a
                   href={`tel:${prospect.phone}`}
