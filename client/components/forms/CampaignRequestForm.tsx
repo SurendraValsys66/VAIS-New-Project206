@@ -1236,206 +1236,159 @@ export default function CampaignRequestForm() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 gap-6">
-          {/* LEFT COLUMN */}
+        {/* Main Form Card - Single Card Layout */}
+        <div className="bg-white border border-gray-200 rounded-lg p-8">
           <div className="space-y-6">
-            {/* Section 1: Campaign Details */}
-            <div className="bg-white border border-gray-200 rounded-lg p-6">
-              <div className="flex items-center gap-2 mb-4">
-                <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-gray-200 text-gray-600 text-sm font-semibold">
-                  1
-                </span>
-                <h3 className="text-sm font-semibold text-gray-900">
-                  Campaign Details
-                </h3>
-              </div>
-              <p className="text-xs text-gray-600 mb-4">
-                Campaign name and company size
-              </p>
+            {/* Form Content in 2-Column Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Campaign Name */}
+              <FormField
+                control={form.control}
+                name="campaignName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-sm font-semibold text-gray-900">
+                      Campaign Name *
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="e.g. Q2 SaaS Decision Makers Push"
+                        {...field}
+                        className="h-10 text-sm"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-              <div className="space-y-4">
-                <FormField
-                  control={form.control}
-                  name="campaignName"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-xs font-medium">
-                        Campaign Name *
-                      </FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="Enter campaign name"
-                          {...field}
-                          className="h-9 text-sm"
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+              {/* Employee Size */}
+              <FormField
+                control={form.control}
+                name="employeeSize"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-sm font-semibold text-gray-900">
+                      Employee Size *
+                    </FormLabel>
+                    <FormControl>
+                      <MultiSelect
+                        options={employeeSizeOptions}
+                        selected={field.value}
+                        onSelectedChange={field.onChange}
+                        placeholder="Select employee size ranges"
+                        searchPlaceholder="Search..."
+                        showSelectAll={true}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-                <FormField
-                  control={form.control}
-                  name="employeeSize"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-xs font-medium">
-                        Employee Size *
-                      </FormLabel>
-                      <FormControl>
-                        <MultiSelect
-                          options={employeeSizeOptions}
-                          selected={field.value}
-                          onSelectedChange={field.onChange}
-                          placeholder="Select employee size ranges"
-                          searchPlaceholder="Search..."
-                          showSelectAll={true}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+              {/* Job Title */}
+              <FormField
+                control={form.control}
+                name="jobTitles"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-sm font-semibold text-gray-900">
+                      Job Title
+                    </FormLabel>
+                    <FormControl>
+                      <MultiSelect
+                        options={jobTitleOptions}
+                        selected={field.value}
+                        onSelectedChange={field.onChange}
+                        placeholder="Select job titles"
+                        searchPlaceholder="Search..."
+                        showSelectAll={true}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-              </div>
-            </div>
+              {/* Job Function */}
+              <FormField
+                control={form.control}
+                name="jobFunctions"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-sm font-semibold text-gray-900">
+                      Job Function *
+                    </FormLabel>
+                    <FormControl>
+                      <MultiSelect
+                        options={jobFunctionOptions}
+                        selected={field.value}
+                        onSelectedChange={field.onChange}
+                        placeholder="Select job functions"
+                        searchPlaceholder="Search..."
+                        showSelectAll={true}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-            {/* Section 3: File Upload - Only shown in TAL mode */}
-            {campaignMode === "tal" && (
-              <div className="bg-white border border-gray-200 rounded-lg p-6">
-                <div className="flex items-center gap-2 mb-2">
-                  <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-gray-200 text-gray-600 text-sm font-semibold">
-                    3
-                  </span>
-                  <h3 className="text-sm font-semibold text-gray-900">
-                    File Upload
-                  </h3>
-                </div>
-                <p className="text-xs text-gray-600 mb-4">Upload TAL File</p>
+              {/* Job Level */}
+              <FormField
+                control={form.control}
+                name="jobLevels"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-sm font-semibold text-gray-900">
+                      Job Level *
+                    </FormLabel>
+                    <FormControl>
+                      <MultiSelect
+                        options={jobLevelOptions}
+                        selected={field.value}
+                        onSelectedChange={field.onChange}
+                        placeholder="Select levels"
+                        showSelectAll={true}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-                <FileUpload onFileChange={setUploadedFile} file={uploadedFile} />
-              </div>
-            )}
-          </div>
+              {/* Geolocation */}
+              <FormField
+                control={form.control}
+                name="geolocations"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-sm font-semibold text-gray-900">
+                      Geolocation *
+                    </FormLabel>
+                    <FormControl>
+                      <MultiSelect
+                        options={geolocationOptions}
+                        selected={field.value}
+                        onSelectedChange={field.onChange}
+                        placeholder="Select locations"
+                        searchPlaceholder="Search..."
+                        showSelectAll={true}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-          {/* RIGHT COLUMN */}
-          <div className="space-y-6">
-            {/* Section 2: Target Criteria */}
-            <div className="bg-white border border-gray-200 rounded-lg p-6">
-              <div className="flex items-center gap-2 mb-4">
-                <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-gray-200 text-gray-600 text-sm font-semibold">
-                  2
-                </span>
-                <h3 className="text-sm font-semibold text-gray-900">
-                  Target Criteria
-                </h3>
-              </div>
-              <p className="text-xs text-gray-600 mb-4">
-                Select job titles, levels & locations
-              </p>
-
-              <div className="space-y-3">
-                <div className="grid grid-cols-2 gap-3">
-                  <FormField
-                    control={form.control}
-                    name="jobTitles"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-xs font-medium">
-                          Job Title
-                        </FormLabel>
-                        <FormControl>
-                          <MultiSelect
-                            options={jobTitleOptions}
-                            selected={field.value}
-                            onSelectedChange={field.onChange}
-                            placeholder="Select job titles"
-                            searchPlaceholder="Search..."
-                            showSelectAll={true}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="jobFunctions"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-xs font-medium">
-                          Job Function *
-                        </FormLabel>
-                        <FormControl>
-                          <MultiSelect
-                            options={jobFunctionOptions}
-                            selected={field.value}
-                            onSelectedChange={field.onChange}
-                            placeholder="Select job functions"
-                            searchPlaceholder="Search..."
-                            showSelectAll={true}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-
-                <div className="grid grid-cols-2 gap-3">
-                  <FormField
-                    control={form.control}
-                    name="jobLevels"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-xs font-medium">
-                          Job Level *
-                        </FormLabel>
-                        <FormControl>
-                          <MultiSelect
-                            options={jobLevelOptions}
-                            selected={field.value}
-                            onSelectedChange={field.onChange}
-                            placeholder="Select levels"
-                            showSelectAll={true}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="geolocations"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-xs font-medium">
-                          Geolocation *
-                        </FormLabel>
-                        <FormControl>
-                          <MultiSelect
-                            options={geolocationOptions}
-                            selected={field.value}
-                            onSelectedChange={field.onChange}
-                            placeholder="Select locations"
-                            searchPlaceholder="Search..."
-                            showSelectAll={true}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-
+              {/* Industry - Full Width */}
+              <div className="md:col-span-2">
                 <FormField
                   control={form.control}
                   name="industries"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-xs font-medium">
+                      <FormLabel className="text-sm font-semibold text-gray-900">
                         Industry
                       </FormLabel>
                       <FormControl>
@@ -1453,120 +1406,120 @@ export default function CampaignRequestForm() {
                   )}
                 />
               </div>
+
+              {/* File Upload - Only shown in TAL mode - Full Width */}
+              {campaignMode === "tal" && (
+                <div className="md:col-span-2">
+                  <div className="mb-2">
+                    <h4 className="text-sm font-semibold text-gray-900">
+                      Upload TAL File
+                    </h4>
+                  </div>
+                  <FileUpload onFileChange={setUploadedFile} file={uploadedFile} />
+                </div>
+              )}
             </div>
 
-            {/* Section 4: Submit Campaign */}
-            <div className="bg-gradient-to-b from-orange-50 to-orange-100 border-2 border-orange-300 rounded-lg p-6">
-              <div className="flex items-center gap-2 mb-4">
-                <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-orange-500 text-white text-sm font-semibold">
-                  {campaignMode === "tal" ? 4 : 3}
-                </span>
-                <h3 className="text-sm font-semibold text-gray-900">
-                  Campaign Request
-                </h3>
-              </div>
+            {/* Divider */}
+            <div className="border-t border-gray-200"></div>
 
-              <p className="text-xs text-gray-700 mb-3">
-                {campaignMode === "live"
-                  ? "Check deliverables instantly"
-                  : "Upload TAL file and submit your request"}
-              </p>
-
-              {campaignMode === "live" ? (
-                // LIVE MODE - Show Check Deliverables Button
-                <>
-                  <div className="bg-blue-50 border border-blue-200 rounded p-3 mb-4">
-                    <p className="text-xs text-blue-800">
-                      View live campaign deliverables and reach analytics in real-time.
-                    </p>
+            {/* Live Campaign Deliverables Section */}
+            <div className="bg-orange-50 rounded-lg p-6 border border-orange-100">
+              <div className="flex items-start gap-4">
+                <div className="flex-shrink-0">
+                  <div className="flex items-center justify-center h-10 w-10 rounded-lg bg-orange-500">
+                    <Activity className="h-5 w-5 text-white" />
                   </div>
-                  <DeliverablesDialog
-                    jobTitles={form.watch("jobTitles")}
-                    jobFunctions={form.watch("jobFunctions")}
-                    jobLevels={form.watch("jobLevels")}
-                    geolocations={form.watch("geolocations")}
-                    industries={form.watch("industries")}
-                    campaignName={form.watch("campaignName")}
-                    employeeSize={form.watch("employeeSize")}
-                    isFormValid={isFormValid()}
-                    selectedAssets={selectedAssets}
-                  />
-                </>
-              ) : (
-                // TAL FILE MODE - Show Submit Button or Countdown
-                <>
-                  {!campaignSubmitted ? (
-                    <>
-                      <div className="bg-blue-50 border border-blue-200 rounded p-3 mb-4">
-                        <p className="text-xs text-blue-800">
-                          All required fields have been filled. Click the button below
-                          to submit your campaign request.
-                        </p>
-                      </div>
+                </div>
+                <div className="flex-1">
+                  <h3 className="text-base font-semibold text-gray-900 mb-1">
+                    Live Campaign Deliverables
+                  </h3>
+                  <p className="text-sm text-gray-600 mb-4">
+                    View live campaign deliverables and reach analytics in real-time.
+                  </p>
 
-                      <Button
-                        type="submit"
-                        className="w-full bg-orange-500 hover:bg-orange-600 text-white text-sm font-medium h-10"
-                        disabled={!isFormValid()}
-                      >
-                        Submit Campaign Request
-                      </Button>
-                    </>
+                  {campaignMode === "live" ? (
+                    // LIVE MODE - Show Check Deliverables Button
+                    <DeliverablesDialog
+                      jobTitles={form.watch("jobTitles")}
+                      jobFunctions={form.watch("jobFunctions")}
+                      jobLevels={form.watch("jobLevels")}
+                      geolocations={form.watch("geolocations")}
+                      industries={form.watch("industries")}
+                      campaignName={form.watch("campaignName")}
+                      employeeSize={form.watch("employeeSize")}
+                      isFormValid={isFormValid()}
+                      selectedAssets={selectedAssets}
+                    />
                   ) : (
+                    // TAL FILE MODE - Show Submit Button or Countdown
                     <>
-                      <div className="bg-green-50 border border-green-300 rounded-lg p-4 mb-4">
-                        <div className="flex items-start gap-3">
-                          <div className="flex-shrink-0 mt-0.5">
-                            <Check className="w-5 h-5 text-green-600" />
-                          </div>
-                          <div className="flex-1">
-                            <h4 className="text-sm font-semibold text-green-900 mb-1">
-                              Campaign Request Submitted!
-                            </h4>
-                            <p className="text-xs text-green-800 mb-3">
-                              Your campaign request has been received. We will prepare all deliverables and notify you when they are ready.
-                            </p>
-                            <div className="bg-white rounded border border-green-200 p-3">
-                              <p className="text-xs font-medium text-gray-600 mb-1">
-                                Time until deliverables are ready:
-                              </p>
-                              <p className="text-lg font-bold text-green-700">
-                                {formatTimeRemaining(timeRemaining)}
-                              </p>
-                              {timeRemaining === 0 && (
-                                <p className="text-xs text-green-700 mt-2 font-semibold">
-                                  ✓ All deliverables are ready for download!
+                      {!campaignSubmitted ? (
+                        <Button
+                          type="submit"
+                          className="bg-orange-500 hover:bg-orange-600 text-white text-sm font-medium h-10"
+                          disabled={!isFormValid()}
+                        >
+                          Submit Campaign Request
+                        </Button>
+                      ) : (
+                        <>
+                          <div className="bg-green-50 border border-green-300 rounded-lg p-4 mb-4">
+                            <div className="flex items-start gap-3">
+                              <div className="flex-shrink-0 mt-0.5">
+                                <Check className="w-5 h-5 text-green-600" />
+                              </div>
+                              <div className="flex-1">
+                                <h4 className="text-sm font-semibold text-green-900 mb-1">
+                                  Campaign Request Submitted!
+                                </h4>
+                                <p className="text-xs text-green-800 mb-3">
+                                  Your campaign request has been received. We will prepare all deliverables and notify you when they are ready.
                                 </p>
-                              )}
+                                <div className="bg-white rounded border border-green-200 p-3">
+                                  <p className="text-xs font-medium text-gray-600 mb-1">
+                                    Time until deliverables are ready:
+                                  </p>
+                                  <p className="text-lg font-bold text-green-700">
+                                    {formatTimeRemaining(timeRemaining)}
+                                  </p>
+                                  {timeRemaining === 0 && (
+                                    <p className="text-xs text-green-700 mt-2 font-semibold">
+                                      ✓ All deliverables are ready for download!
+                                    </p>
+                                  )}
+                                </div>
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      </div>
 
-                      {timeRemaining === 0 && (
-                        <Button
-                          type="button"
-                          className="w-full bg-green-600 hover:bg-green-700 text-white text-sm font-medium h-10"
-                          onClick={() => {
-                            setCampaignSubmitted(false);
-                            form.reset();
-                          }}
-                        >
-                          Download Deliverables
-                        </Button>
+                          {timeRemaining === 0 && (
+                            <Button
+                              type="button"
+                              className="bg-green-600 hover:bg-green-700 text-white text-sm font-medium h-10"
+                              onClick={() => {
+                                setCampaignSubmitted(false);
+                                form.reset();
+                              }}
+                            >
+                              Download Deliverables
+                            </Button>
+                          )}
+                        </>
                       )}
                     </>
                   )}
-                </>
-              )}
+                </div>
+              </div>
 
-              {/* Asset Buttons - Below Submit Button - Only in Live mode */}
+              {/* Asset Buttons - Below Deliverables Section - Only in Live mode */}
               {campaignMode === "live" && (
-              <div className="mt-4">
-                <p className="text-xs text-gray-600 mb-3 font-medium">
+              <div className="mt-6 pt-6 border-t border-orange-200">
+                <p className="text-sm text-gray-600 mb-4 font-medium">
                   Add Campaign Assets (Optional)
                 </p>
-                <div className="grid grid-cols-3 gap-2">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                   {/* AI Email Generator Button */}
                   <button
                     type="button"
