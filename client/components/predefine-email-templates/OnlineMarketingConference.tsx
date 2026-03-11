@@ -2,9 +2,16 @@ import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
-import { CheckCircle2 } from "lucide-react";
+import { CheckCircle2, Zap } from "lucide-react";
 
-export const OnlineMarketingConferenceTemplate: React.FC = () => {
+interface OnlineMarketingConferenceTemplateProps {
+  onUseTemplate?: () => void;
+  isPreview?: boolean;
+}
+
+export const OnlineMarketingConferenceTemplate: React.FC<
+  OnlineMarketingConferenceTemplateProps
+> = ({ onUseTemplate, isPreview = false }) => {
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
@@ -38,6 +45,16 @@ export const OnlineMarketingConferenceTemplate: React.FC = () => {
           <div className="absolute top-0 right-0 w-96 h-96 bg-white rounded-full mix-blend-multiply filter blur-3xl"></div>
           <div className="absolute bottom-0 left-0 w-96 h-96 bg-white rounded-full mix-blend-multiply filter blur-3xl"></div>
         </div>
+
+        {isPreview && onUseTemplate && (
+          <button
+            onClick={onUseTemplate}
+            className="absolute top-6 right-6 z-20 bg-white text-teal-600 hover:bg-gray-100 font-bold px-6 py-3 rounded-full shadow-lg hover:shadow-xl transition-all flex items-center gap-2"
+          >
+            <Zap className="w-5 h-5" />
+            Use This Template
+          </button>
+        )}
 
         <div className="relative z-10 text-center max-w-4xl mx-auto">
           <p className="text-white text-sm uppercase tracking-widest mb-2 opacity-80">

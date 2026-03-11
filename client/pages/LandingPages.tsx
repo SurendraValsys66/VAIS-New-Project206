@@ -170,18 +170,15 @@ export default function LandingPages() {
           {/* Template Preview */}
           <div className="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100">
             {selectedTemplate === "online-marketing-conference" && (
-              <OnlineMarketingConferenceTemplate />
+              <OnlineMarketingConferenceTemplate
+                isPreview={true}
+                onUseTemplate={() => handleUseTemplate(selectedTemplate!)}
+              />
             )}
           </div>
 
           {/* Action Buttons */}
           <div className="flex gap-4 justify-center py-8">
-            <Button
-              onClick={() => handleUseTemplate(selectedTemplate!)}
-              className="bg-valasys-orange hover:bg-valasys-orange/90 text-white px-8 py-6 rounded-xl font-bold shadow-lg"
-            >
-              Use This Template
-            </Button>
             <Button
               onClick={handleBack}
               variant="outline"
