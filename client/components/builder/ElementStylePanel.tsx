@@ -77,6 +77,9 @@ export const ElementStylePanel: React.FC<ElementStylePanelProps> = ({
     borders: true,
   });
 
+  const [groupPaddingValues, setGroupPaddingValues] = React.useState(false);
+  const [groupMarginValues, setGroupMarginValues] = React.useState(false);
+
   // Use ref to track pending updates to debounce
   const debounceTimerRef = React.useRef<NodeJS.Timeout>();
   const pendingUpdatesRef = React.useRef<Partial<BuilderComponent>>({});
@@ -450,90 +453,208 @@ export const ElementStylePanel: React.FC<ElementStylePanelProps> = ({
             <div className="px-4 py-3">
               {/* Padding */}
               <div className="mb-4">
-                <label className="text-xs font-bold text-gray-700 block mb-3">Padding</label>
-                <div className="grid grid-cols-2 gap-3">
-                  {[
-                    { key: "paddingTop", label: "⊞" },
-                    { key: "paddingRight", label: "⊞" },
-                    { key: "paddingBottom", label: "⊞" },
-                    { key: "paddingLeft", label: "⊞" },
-                  ].map(({ key, label }) => (
-                    <div key={key} className="flex gap-1 items-center">
-                      <span className="text-xs text-gray-500">{label}</span>
-                      <Input
-                        type="number"
-                        value={styles[key as keyof StyleState]}
-                        onChange={(e) => handleStyleChange(key as keyof StyleState, e.target.value)}
-                        className="w-12 text-xs h-8"
-                      />
-                      <span className="text-xs text-gray-500 w-5">px</span>
-                      <div className="flex flex-col gap-0">
-                        <button
-                          onClick={() => {
-                            const current = Number(styles[key as keyof StyleState]) || 0;
-                            handleStyleChange(key as keyof StyleState, String(current + 1));
-                          }}
-                          className="text-xs text-gray-600 hover:text-gray-900 leading-none"
-                        >
-                          ▲
-                        </button>
-                        <button
-                          onClick={() => {
-                            const current = Number(styles[key as keyof StyleState]) || 0;
-                            handleStyleChange(key as keyof StyleState, String(Math.max(0, current - 1)));
-                          }}
-                          className="text-xs text-gray-600 hover:text-gray-900 leading-none"
-                        >
-                          ▼
-                        </button>
-                      </div>
-                    </div>
-                  ))}
+                <div className="flex items-center justify-between mb-3">
+                  <label className="text-xs font-bold text-gray-700">Padding</label>
+                  <label className="flex items-center gap-2 text-xs text-gray-600">
+                    <input
+                      type="checkbox"
+                      checked={groupPaddingValues}
+                      onChange={(e) => setGroupPaddingValues(e.target.checked)}
+                      className="cursor-pointer"
+                    />
+                    <span>Group sides</span>
+                  </label>
                 </div>
+
+                {groupPaddingValues ? (
+                  <div className="flex gap-1 items-center">
+                    <span className="text-xs text-gray-500">⊞</span>
+                    <Input
+                      type="number"
+                      value={styles.paddingTop}
+                      onChange={(e) => {
+                        const val = e.target.value;
+                        handleStyleChange("paddingTop", val);
+                        handleStyleChange("paddingRight", val);
+                        handleStyleChange("paddingBottom", val);
+                        handleStyleChange("paddingLeft", val);
+                      }}
+                      className="w-16 text-xs h-8 text-center"
+                    />
+                    <span className="text-xs text-gray-500 w-5">px</span>
+                    <div className="flex flex-col gap-0">
+                      <button
+                        onClick={() => {
+                          const current = Number(styles.paddingTop) || 0;
+                          const val = String(current + 1);
+                          handleStyleChange("paddingTop", val);
+                          handleStyleChange("paddingRight", val);
+                          handleStyleChange("paddingBottom", val);
+                          handleStyleChange("paddingLeft", val);
+                        }}
+                        className="text-xs text-gray-600 hover:text-gray-900 leading-none"
+                      >
+                        ▲
+                      </button>
+                      <button
+                        onClick={() => {
+                          const current = Number(styles.paddingTop) || 0;
+                          const val = String(current - 1);
+                          handleStyleChange("paddingTop", val);
+                          handleStyleChange("paddingRight", val);
+                          handleStyleChange("paddingBottom", val);
+                          handleStyleChange("paddingLeft", val);
+                        }}
+                        className="text-xs text-gray-600 hover:text-gray-900 leading-none"
+                      >
+                        ▼
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-2 gap-3">
+                    {[
+                      { key: "paddingTop", label: "⊞" },
+                      { key: "paddingRight", label: "⊞" },
+                      { key: "paddingBottom", label: "⊞" },
+                      { key: "paddingLeft", label: "⊞" },
+                    ].map(({ key, label }) => (
+                      <div key={key} className="flex gap-1 items-center">
+                        <span className="text-xs text-gray-500">{label}</span>
+                        <Input
+                          type="number"
+                          value={styles[key as keyof StyleState]}
+                          onChange={(e) => handleStyleChange(key as keyof StyleState, e.target.value)}
+                          className="w-12 text-xs h-8 text-center"
+                        />
+                        <span className="text-xs text-gray-500 w-5">px</span>
+                        <div className="flex flex-col gap-0">
+                          <button
+                            onClick={() => {
+                              const current = Number(styles[key as keyof StyleState]) || 0;
+                              handleStyleChange(key as keyof StyleState, String(current + 1));
+                            }}
+                            className="text-xs text-gray-600 hover:text-gray-900 leading-none"
+                          >
+                            ▲
+                          </button>
+                          <button
+                            onClick={() => {
+                              const current = Number(styles[key as keyof StyleState]) || 0;
+                              handleStyleChange(key as keyof StyleState, String(current - 1));
+                            }}
+                            className="text-xs text-gray-600 hover:text-gray-900 leading-none"
+                          >
+                            ▼
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
 
               {/* Margin */}
               <div className="border-t pt-3">
-                <label className="text-xs font-bold text-gray-700 block mb-3">Margin</label>
-                <div className="grid grid-cols-2 gap-3">
-                  {[
-                    { key: "marginTop", label: "⊞" },
-                    { key: "marginRight", label: "⊞" },
-                    { key: "marginBottom", label: "⊞" },
-                    { key: "marginLeft", label: "⊞" },
-                  ].map(({ key, label }) => (
-                    <div key={key} className="flex gap-1 items-center">
-                      <span className="text-xs text-gray-500">{label}</span>
-                      <Input
-                        type="number"
-                        value={styles[key as keyof StyleState]}
-                        onChange={(e) => handleStyleChange(key as keyof StyleState, e.target.value)}
-                        className="w-12 text-xs h-8"
-                      />
-                      <span className="text-xs text-gray-500 w-5">px</span>
-                      <div className="flex flex-col gap-0">
-                        <button
-                          onClick={() => {
-                            const current = Number(styles[key as keyof StyleState]) || 0;
-                            handleStyleChange(key as keyof StyleState, String(current + 1));
-                          }}
-                          className="text-xs text-gray-600 hover:text-gray-900 leading-none"
-                        >
-                          ▲
-                        </button>
-                        <button
-                          onClick={() => {
-                            const current = Number(styles[key as keyof StyleState]) || 0;
-                            handleStyleChange(key as keyof StyleState, String(Math.max(0, current - 1)));
-                          }}
-                          className="text-xs text-gray-600 hover:text-gray-900 leading-none"
-                        >
-                          ▼
-                        </button>
-                      </div>
-                    </div>
-                  ))}
+                <div className="flex items-center justify-between mb-3">
+                  <label className="text-xs font-bold text-gray-700">Margin</label>
+                  <label className="flex items-center gap-2 text-xs text-gray-600">
+                    <input
+                      type="checkbox"
+                      checked={groupMarginValues}
+                      onChange={(e) => setGroupMarginValues(e.target.checked)}
+                      className="cursor-pointer"
+                    />
+                    <span>Group sides</span>
+                  </label>
                 </div>
+
+                {groupMarginValues ? (
+                  <div className="flex gap-1 items-center">
+                    <span className="text-xs text-gray-500">⊞</span>
+                    <Input
+                      type="number"
+                      value={styles.marginTop}
+                      onChange={(e) => {
+                        const val = e.target.value;
+                        handleStyleChange("marginTop", val);
+                        handleStyleChange("marginRight", val);
+                        handleStyleChange("marginBottom", val);
+                        handleStyleChange("marginLeft", val);
+                      }}
+                      className="w-16 text-xs h-8 text-center"
+                    />
+                    <span className="text-xs text-gray-500 w-5">px</span>
+                    <div className="flex flex-col gap-0">
+                      <button
+                        onClick={() => {
+                          const current = Number(styles.marginTop) || 0;
+                          const val = String(current + 1);
+                          handleStyleChange("marginTop", val);
+                          handleStyleChange("marginRight", val);
+                          handleStyleChange("marginBottom", val);
+                          handleStyleChange("marginLeft", val);
+                        }}
+                        className="text-xs text-gray-600 hover:text-gray-900 leading-none"
+                      >
+                        ▲
+                      </button>
+                      <button
+                        onClick={() => {
+                          const current = Number(styles.marginTop) || 0;
+                          const val = String(current - 1);
+                          handleStyleChange("marginTop", val);
+                          handleStyleChange("marginRight", val);
+                          handleStyleChange("marginBottom", val);
+                          handleStyleChange("marginLeft", val);
+                        }}
+                        className="text-xs text-gray-600 hover:text-gray-900 leading-none"
+                      >
+                        ▼
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-2 gap-3">
+                    {[
+                      { key: "marginTop", label: "⊞" },
+                      { key: "marginRight", label: "⊞" },
+                      { key: "marginBottom", label: "⊞" },
+                      { key: "marginLeft", label: "⊞" },
+                    ].map(({ key, label }) => (
+                      <div key={key} className="flex gap-1 items-center">
+                        <span className="text-xs text-gray-500">{label}</span>
+                        <Input
+                          type="number"
+                          value={styles[key as keyof StyleState]}
+                          onChange={(e) => handleStyleChange(key as keyof StyleState, e.target.value)}
+                          className="w-12 text-xs h-8 text-center"
+                        />
+                        <span className="text-xs text-gray-500 w-5">px</span>
+                        <div className="flex flex-col gap-0">
+                          <button
+                            onClick={() => {
+                              const current = Number(styles[key as keyof StyleState]) || 0;
+                              handleStyleChange(key as keyof StyleState, String(current + 1));
+                            }}
+                            className="text-xs text-gray-600 hover:text-gray-900 leading-none"
+                          >
+                            ▲
+                          </button>
+                          <button
+                            onClick={() => {
+                              const current = Number(styles[key as keyof StyleState]) || 0;
+                              handleStyleChange(key as keyof StyleState, String(current - 1));
+                            }}
+                            className="text-xs text-gray-600 hover:text-gray-900 leading-none"
+                          >
+                            ▼
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
           )}
