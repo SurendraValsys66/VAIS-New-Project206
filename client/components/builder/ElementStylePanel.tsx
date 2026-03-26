@@ -190,7 +190,6 @@ export const ElementStylePanel: React.FC<ElementStylePanelProps> = ({
           <h3 className="text-sm font-bold text-gray-700">
             {component.type.charAt(0).toUpperCase() + component.type.slice(1)}
           </h3>
-          <p className="text-xs text-gray-500 mt-1">{component.id}</p>
         </div>
         <Button
           variant="ghost"
