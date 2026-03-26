@@ -114,6 +114,7 @@ export const ElementStylePanel: React.FC<ElementStylePanelProps> = ({
   const [groupPaddingValues, setGroupPaddingValues] = React.useState(false);
   const [groupMarginValues, setGroupMarginValues] = React.useState(false);
   const [showImageDialog, setShowImageDialog] = React.useState(false);
+  const [imageDialogUrl, setImageDialogUrl] = React.useState("");
   const fileInputRef = React.useRef<HTMLInputElement>(null);
 
   // Use ref to track pending updates to debounce
@@ -586,7 +587,10 @@ export const ElementStylePanel: React.FC<ElementStylePanelProps> = ({
                         <div className="flex items-center justify-between">
                           <h3 className="text-lg font-semibold text-gray-900">Add Image</h3>
                           <button
-                            onClick={() => setShowImageDialog(false)}
+                            onClick={() => {
+                              setShowImageDialog(false);
+                              setImageDialogUrl("");
+                            }}
                             className="text-gray-400 hover:text-gray-600"
                           >
                             <X className="w-5 h-5" />
@@ -621,16 +625,14 @@ export const ElementStylePanel: React.FC<ElementStylePanelProps> = ({
                           <Input
                             type="text"
                             placeholder="https://example.com/image.jpg"
+                            value={imageDialogUrl}
+                            onChange={(e) => setImageDialogUrl(e.target.value)}
                             className="text-xs"
                             onKeyDown={(e) => {
-                              if (e.key === 'Enter' && e.currentTarget.value) {
-                                handleStyleChange("backgroundImageUrl", e.currentTarget.value);
+                              if (e.key === 'Enter' && imageDialogUrl) {
+                                handleStyleChange("backgroundImageUrl", imageDialogUrl);
                                 setShowImageDialog(false);
-                              }
-                            }}
-                            onBlur={(e) => {
-                              if (e.currentTarget.value) {
-                                handleStyleChange("backgroundImageUrl", e.currentTarget.value);
+                                setImageDialogUrl("");
                               }
                             }}
                           />
@@ -639,10 +641,26 @@ export const ElementStylePanel: React.FC<ElementStylePanelProps> = ({
 
                       <div className="p-6 border-t border-gray-200 flex gap-2 justify-end">
                         <button
-                          onClick={() => setShowImageDialog(false)}
+                          onClick={() => {
+                            setShowImageDialog(false);
+                            setImageDialogUrl("");
+                          }}
                           className="px-4 py-2 text-xs font-medium text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
                         >
                           Cancel
+                        </button>
+                        <button
+                          onClick={() => {
+                            if (imageDialogUrl) {
+                              handleStyleChange("backgroundImageUrl", imageDialogUrl);
+                              setShowImageDialog(false);
+                              setImageDialogUrl("");
+                            }
+                          }}
+                          disabled={!imageDialogUrl}
+                          className="px-4 py-2 text-xs font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                          Add Image
                         </button>
                       </div>
                     </div>
