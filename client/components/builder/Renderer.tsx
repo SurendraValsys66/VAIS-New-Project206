@@ -42,6 +42,56 @@ export const ComponentRenderer: React.FC<RendererProps> = ({
   parentId,
   parentIndex,
 }) => {
+  const getComponentStyles = () => {
+    const props = component.props || {};
+    const styles: React.CSSProperties = {};
+
+    // Padding
+    if (props.paddingTop || props.paddingRight || props.paddingBottom || props.paddingLeft) {
+      styles.paddingTop = props.paddingTop ? `${props.paddingTop}px` : undefined;
+      styles.paddingRight = props.paddingRight ? `${props.paddingRight}px` : undefined;
+      styles.paddingBottom = props.paddingBottom ? `${props.paddingBottom}px` : undefined;
+      styles.paddingLeft = props.paddingLeft ? `${props.paddingLeft}px` : undefined;
+    }
+
+    // Margin
+    if (props.marginTop || props.marginRight || props.marginBottom || props.marginLeft) {
+      styles.marginTop = props.marginTop ? `${props.marginTop}px` : undefined;
+      styles.marginRight = props.marginRight ? `${props.marginRight}px` : undefined;
+      styles.marginBottom = props.marginBottom ? `${props.marginBottom}px` : undefined;
+      styles.marginLeft = props.marginLeft ? `${props.marginLeft}px` : undefined;
+    }
+
+    // Colors
+    if (props.backgroundColor) {
+      styles.backgroundColor = props.backgroundColor;
+    }
+    if (props.textColor) {
+      styles.color = props.textColor;
+    }
+
+    // Border
+    if (props.borderWidth) {
+      styles.borderWidth = `${props.borderWidth}px`;
+      styles.borderStyle = "solid";
+      styles.borderColor = props.borderColor || "#000000";
+    }
+
+    // Border Radius
+    if (props.borderRadius) {
+      styles.borderRadius = `${props.borderRadius}px`;
+    }
+
+    // Font Size
+    if (props.fontSize) {
+      styles.fontSize = `${props.fontSize}px`;
+    }
+
+    return styles;
+  };
+
+  const componentStyles = getComponentStyles();
+
   const handleCopyComponent = () => {
     onDuplicate(component.id);
   };
@@ -248,19 +298,28 @@ export const ComponentRenderer: React.FC<RendererProps> = ({
     // --- Layout ---
     case "section":
       return wrapWithControls(
-        <section className="bg-white rounded-lg shadow-sm overflow-hidden">
+        <section
+          className="bg-white rounded-lg shadow-sm overflow-hidden"
+          style={componentStyles}
+        >
           {renderChildren()}
         </section>,
       );
     case "row":
       return wrapWithControls(
-        <div className="bg-gray-50/50 rounded p-1">
+        <div
+          className="bg-gray-50/50 rounded p-1"
+          style={componentStyles}
+        >
           {renderChildren()}
         </div>,
       );
     case "column":
       return wrapWithControls(
-        <div className="bg-valasys-orange/5 rounded border border-valasys-orange/10 min-h-[60px]">
+        <div
+          className="bg-valasys-orange/5 rounded border border-valasys-orange/10 min-h-[60px]"
+          style={componentStyles}
+        >
           {renderChildren()}
         </div>,
       );
@@ -268,7 +327,7 @@ export const ComponentRenderer: React.FC<RendererProps> = ({
     // --- Basic Components ---
     case "heading":
       return wrapWithControls(
-        <div className="p-4 h-full flex items-center">
+        <div className="p-4 h-full flex items-center" style={componentStyles}>
           <h2
             className="text-3xl font-bold w-full leading-tight"
             contentEditable
@@ -284,7 +343,7 @@ export const ComponentRenderer: React.FC<RendererProps> = ({
       );
     case "paragraph":
       return wrapWithControls(
-        <div className="p-4 h-full">
+        <div className="p-4 h-full" style={componentStyles}>
           <p
             className="text-base leading-relaxed"
             contentEditable
@@ -315,7 +374,7 @@ export const ComponentRenderer: React.FC<RendererProps> = ({
       );
     case "image":
       return wrapWithControls(
-        <div className="p-4 h-full">
+        <div className="p-4 h-full" style={componentStyles}>
           <div className="h-full bg-gray-100 flex items-center justify-center rounded-2xl text-gray-400 border-2 border-dashed border-gray-200 min-h-[150px]">
             Image Placeholder
           </div>
@@ -323,7 +382,7 @@ export const ComponentRenderer: React.FC<RendererProps> = ({
       );
     case "video":
       return wrapWithControls(
-        <div className="p-4 h-full">
+        <div className="p-4 h-full" style={componentStyles}>
           <div className="h-full aspect-video bg-black/90 flex items-center justify-center rounded-2xl shadow-xl overflow-hidden relative group/video">
             <Play className="w-16 h-16 text-white opacity-50 group-hover/video:opacity-100 transition-opacity" />
             <div className="absolute bottom-4 left-4 right-4 h-1 bg-white/20 rounded-full overflow-hidden">
@@ -334,7 +393,7 @@ export const ComponentRenderer: React.FC<RendererProps> = ({
       );
     case "divider":
       return wrapWithControls(
-        <div className="px-4 py-8 h-full flex items-center">
+        <div className="px-4 py-8 h-full flex items-center" style={componentStyles}>
           <hr className="w-full border-t border-gray-200" />
         </div>,
       );
@@ -342,7 +401,7 @@ export const ComponentRenderer: React.FC<RendererProps> = ({
     // --- Marketing Components ---
     case "hero":
       return wrapWithControls(
-        <div className="relative overflow-hidden bg-white p-12 lg:p-24 flex flex-col items-center text-center gap-6 rounded-3xl border border-gray-100">
+        <div className="relative overflow-hidden bg-white p-12 lg:p-24 flex flex-col items-center text-center gap-6 rounded-3xl border border-gray-100" style={componentStyles}>
           <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-valasys-orange/5 to-transparent pointer-events-none" />
           <div
             className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-valasys-orange/10 text-valasys-orange text-xs font-bold uppercase tracking-wider"
@@ -381,7 +440,7 @@ export const ComponentRenderer: React.FC<RendererProps> = ({
 
     case "feature-grid":
       return wrapWithControls(
-        <div className="p-12 bg-gray-50/50 rounded-3xl border border-gray-100">
+        <div className="p-12 bg-gray-50/50 rounded-3xl border border-gray-100" style={componentStyles}>
           <div className="text-center mb-16 space-y-4">
             <h2 className="text-2xl font-bold text-gray-900" contentEditable suppressContentEditableWarning>
               Everything you need to scale
@@ -410,7 +469,7 @@ export const ComponentRenderer: React.FC<RendererProps> = ({
 
     case "pricing":
       return wrapWithControls(
-        <div className="p-12 bg-white rounded-3xl border border-gray-100">
+        <div className="p-12 bg-white rounded-3xl border border-gray-100" style={componentStyles}>
           <div className="text-center mb-12">
             <h2 className="text-2xl font-black mb-4" contentEditable suppressContentEditableWarning>Simple, transparent pricing</h2>
             <p className="text-gray-500" contentEditable suppressContentEditableWarning>Choose the plan that's right for you.</p>
@@ -460,7 +519,7 @@ export const ComponentRenderer: React.FC<RendererProps> = ({
 
     case "testimonials":
       return wrapWithControls(
-        <div className="p-12 bg-valasys-orange rounded-3xl text-white relative overflow-hidden">
+        <div className="p-12 bg-valasys-orange rounded-3xl text-white relative overflow-hidden" style={componentStyles}>
           <Quote className="absolute top-8 left-8 w-24 h-24 opacity-10" />
           <div className="relative z-10 flex flex-col items-center text-center gap-8">
             <div className="flex gap-1">
@@ -491,7 +550,7 @@ export const ComponentRenderer: React.FC<RendererProps> = ({
 
     case "logo-cloud":
       return wrapWithControls(
-        <div className="p-12 bg-white rounded-3xl border border-gray-100 flex flex-col items-center gap-12">
+        <div className="p-12 bg-white rounded-3xl border border-gray-100 flex flex-col items-center gap-12" style={componentStyles}>
           <p className="text-sm font-bold text-gray-400 uppercase tracking-widest" contentEditable suppressContentEditableWarning>
             Trusted by the world's most innovative teams
           </p>
@@ -507,7 +566,7 @@ export const ComponentRenderer: React.FC<RendererProps> = ({
 
     case "faq":
       return wrapWithControls(
-        <div className="p-12 bg-gray-50 rounded-3xl border border-gray-100 max-w-4xl mx-auto w-full">
+        <div className="p-12 bg-gray-50 rounded-3xl border border-gray-100 max-w-4xl mx-auto w-full" style={componentStyles}>
           <h2 className="text-2xl font-bold text-center mb-12" contentEditable suppressContentEditableWarning>Frequently Asked Questions</h2>
           <div className="space-y-4">
             {[1, 2, 3, 4].map((f) => (
@@ -530,7 +589,7 @@ export const ComponentRenderer: React.FC<RendererProps> = ({
 
     case "cta":
       return wrapWithControls(
-        <div className="p-16 bg-gradient-to-tr from-gray-900 to-valasys-gray-900 rounded-3xl text-white text-center flex flex-col items-center gap-8">
+        <div className="p-16 bg-gradient-to-tr from-gray-900 to-valasys-gray-900 rounded-3xl text-white text-center flex flex-col items-center gap-8" style={componentStyles}>
           <h2 className="text-3xl font-black" contentEditable suppressContentEditableWarning>
             Ready to start building?
           </h2>
@@ -551,7 +610,7 @@ export const ComponentRenderer: React.FC<RendererProps> = ({
 
     case "contact-form":
       return wrapWithControls(
-        <div className="p-12 bg-white rounded-3xl border border-gray-100 shadow-xl max-w-2xl mx-auto w-full flex flex-col gap-8">
+        <div className="p-12 bg-white rounded-3xl border border-gray-100 shadow-xl max-w-2xl mx-auto w-full flex flex-col gap-8" style={componentStyles}>
           <div className="text-center space-y-2">
             <h2 className="text-2xl font-bold">Get in touch</h2>
             <p className="text-gray-500">We'll get back to you within 24 hours.</p>
@@ -582,7 +641,7 @@ export const ComponentRenderer: React.FC<RendererProps> = ({
 
     case "card":
       return wrapWithControls(
-        <div className="p-4 h-full">
+        <div className="p-4 h-full" style={componentStyles}>
           <div className="bg-white border rounded-xl p-4 shadow-sm h-full flex flex-col">
             <h3 className="font-semibold mb-2" contentEditable suppressContentEditableWarning>
               Card Title

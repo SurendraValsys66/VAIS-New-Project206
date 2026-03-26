@@ -15,8 +15,14 @@ interface StyleState {
   backgroundColor: string;
   textColor: string;
   fontSize: string;
-  padding: string;
-  margin: string;
+  paddingTop: string;
+  paddingRight: string;
+  paddingBottom: string;
+  paddingLeft: string;
+  marginTop: string;
+  marginRight: string;
+  marginBottom: string;
+  marginLeft: string;
   width: string;
   height: string;
   borderRadius: string;
@@ -24,10 +30,16 @@ interface StyleState {
   borderWidth: string;
 }
 
+<<<<<<< ai_main_4b439789f712
+interface SpacingState {
+  groupPadding: boolean;
+  groupMargin: boolean;
+=======
 interface SizingUnits {
   width: "%" | "px";
   height: "%" | "px";
   fontSize: "%" | "px";
+>>>>>>> main
 }
 
 export const ElementStylePanel: React.FC<ElementStylePanelProps> = ({
@@ -39,8 +51,14 @@ export const ElementStylePanel: React.FC<ElementStylePanelProps> = ({
     backgroundColor: "#ffffff",
     textColor: "#000000",
     fontSize: "16",
-    padding: "16",
-    margin: "0",
+    paddingTop: "0",
+    paddingRight: "0",
+    paddingBottom: "0",
+    paddingLeft: "0",
+    marginTop: "0",
+    marginRight: "0",
+    marginBottom: "0",
+    marginLeft: "0",
     width: "100",
     height: "",
     borderRadius: "0",
@@ -48,10 +66,16 @@ export const ElementStylePanel: React.FC<ElementStylePanelProps> = ({
     borderWidth: "0",
   });
 
+<<<<<<< ai_main_4b439789f712
+  const [spacing, setSpacing] = React.useState<SpacingState>({
+    groupPadding: true,
+    groupMargin: true,
+=======
   const [sizingUnits, setSizingUnits] = React.useState<SizingUnits>({
     width: "%",
     height: "px",
     fontSize: "px",
+>>>>>>> main
   });
 
   const [expandedSections, setExpandedSections] = React.useState({
@@ -67,17 +91,24 @@ export const ElementStylePanel: React.FC<ElementStylePanelProps> = ({
 
   React.useEffect(() => {
     if (component) {
+      const props = component.props || {};
       setStyles({
-        backgroundColor: component.backgroundColor || "#ffffff",
-        textColor: component.textColor || "#000000",
-        fontSize: component.fontSize ? String(component.fontSize) : "16",
-        padding: component.padding ? String(component.padding) : "16",
-        margin: component.margin ? String(component.margin) : "0",
-        width: component.width ? String(component.width) : "100",
-        height: component.height ? String(component.height) : "",
-        borderRadius: component.borderRadius ? String(component.borderRadius) : "0",
-        borderColor: component.borderColor || "#000000",
-        borderWidth: component.borderWidth ? String(component.borderWidth) : "0",
+        backgroundColor: props.backgroundColor || "#ffffff",
+        textColor: props.textColor || "#000000",
+        fontSize: props.fontSize ? String(props.fontSize) : "16",
+        paddingTop: props.paddingTop ? String(props.paddingTop) : "0",
+        paddingRight: props.paddingRight ? String(props.paddingRight) : "0",
+        paddingBottom: props.paddingBottom ? String(props.paddingBottom) : "0",
+        paddingLeft: props.paddingLeft ? String(props.paddingLeft) : "0",
+        marginTop: props.marginTop ? String(props.marginTop) : "0",
+        marginRight: props.marginRight ? String(props.marginRight) : "0",
+        marginBottom: props.marginBottom ? String(props.marginBottom) : "0",
+        marginLeft: props.marginLeft ? String(props.marginLeft) : "0",
+        width: props.width ? String(props.width) : "100",
+        height: props.height ? String(props.height) : "",
+        borderRadius: props.borderRadius ? String(props.borderRadius) : "0",
+        borderColor: props.borderColor || "#000000",
+        borderWidth: props.borderWidth ? String(props.borderWidth) : "0",
       });
 
       // Initialize units from component
@@ -109,11 +140,34 @@ export const ElementStylePanel: React.FC<ElementStylePanelProps> = ({
         updates[key] = isNaN(Number(value)) ? value : Number(value);
       }
 
+<<<<<<< ai_main_4b439789f712
+  const handleGroupPaddingToggle = () => {
+    setSpacing((prev) => ({
+      ...prev,
+      groupPadding: !prev.groupPadding,
+    }));
+  };
+
+  const handleGroupMarginToggle = () => {
+    setSpacing((prev) => ({
+      ...prev,
+      groupMargin: !prev.groupMargin,
+    }));
+  };
+
+  const toggleSection = (section: keyof typeof expandedSections) => {
+    setExpandedSections((prev) => ({
+      ...prev,
+      [section]: !prev[section],
+    }));
+  };
+=======
       // Store in pending updates
       pendingUpdatesRef.current = {
         ...pendingUpdatesRef.current,
         ...updates,
       };
+>>>>>>> main
 
       // Clear existing debounce timer
       if (debounceTimerRef.current) {
@@ -129,6 +183,162 @@ export const ElementStylePanel: React.FC<ElementStylePanelProps> = ({
     [onUpdate]
   );
 
+<<<<<<< ai_main_4b439789f712
+  const StyleInput = ({
+    label,
+    value,
+    onChange,
+    type = "text",
+    placeholder = "",
+    max = 999,
+    isPercentage = false,
+  }: {
+    label: string;
+    value: string;
+    onChange: (value: string) => void;
+    type?: string;
+    placeholder?: string;
+    max?: number;
+    isPercentage?: boolean;
+  }) => {
+    const inputRef = React.useRef<HTMLInputElement>(null);
+    const maxValue = isPercentage ? 100 : max;
+
+    const clampValue = (val: number): number => {
+      return Math.max(0, Math.min(val, maxValue));
+    };
+
+    const handleNumberChange = (newVal: string) => {
+      // Allow empty string for clearing
+      if (newVal === "") {
+        onChange("");
+        return;
+      }
+
+      const numVal = Number(newVal);
+      if (!isNaN(numVal)) {
+        const clamped = clampValue(numVal);
+        onChange(String(clamped));
+      }
+    };
+
+    const handleNumberKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+      if (type !== "number") return;
+
+      // Prevent default for arrow keys to stop scrolling
+      if (e.key === "ArrowUp" || e.key === "ArrowDown") {
+        e.preventDefault();
+        e.stopPropagation();
+
+        const currentValue = Number(value) || 0;
+        const increment = e.shiftKey ? 10 : 1;
+
+        let newValue = currentValue;
+        if (e.key === "ArrowUp") {
+          newValue = clampValue(currentValue + increment);
+        } else if (e.key === "ArrowDown") {
+          newValue = clampValue(currentValue - increment);
+        }
+
+        onChange(String(newValue));
+      }
+    };
+
+    const handleNumberFocus = (e: React.FocusEvent<HTMLInputElement>) => {
+      if (type !== "number") return;
+      // Select all text when focused so you can start typing immediately
+      setTimeout(() => {
+        e.target.select();
+      }, 0);
+    };
+
+    const decrementValue = () => {
+      const current = Number(value) || 0;
+      const newVal = clampValue(current - 1);
+      onChange(String(newVal));
+    };
+
+    const incrementValue = () => {
+      const current = Number(value) || 0;
+      const newVal = clampValue(current + 1);
+      onChange(String(newVal));
+    };
+
+    return (
+      <div className={cn("space-y-2", label ? "px-4 py-3 border-b border-gray-100" : "flex items-center gap-2")}>
+        {label && <label className="text-xs font-bold text-gray-700">{label}</label>}
+        {type === "color" ? (
+          <div className="flex gap-2 items-center">
+            <input
+              type="color"
+              value={value}
+              onChange={(e) => onChange(e.target.value)}
+              className="w-12 h-10 rounded-lg border border-gray-200 cursor-pointer"
+            />
+            <input
+              type="text"
+              value={value}
+              onChange={(e) => onChange(e.target.value)}
+              className="flex-1 px-3 py-2 border border-gray-200 rounded-lg text-xs font-mono"
+            />
+          </div>
+        ) : (
+          <div className={cn("flex items-center gap-1", label ? "" : "flex-1")}>
+            {type === "number" && <span className="text-xs text-gray-600">▧</span>}
+            <Input
+              ref={inputRef}
+              type={type === "number" ? "text" : type}
+              inputMode={type === "number" ? "numeric" : undefined}
+              value={value}
+              onChange={(e) => {
+                if (type === "number") {
+                  handleNumberChange(e.target.value);
+                } else {
+                  onChange(e.target.value);
+                }
+              }}
+              onKeyDown={handleNumberKeyDown}
+              onFocus={handleNumberFocus}
+              placeholder={placeholder}
+              className={cn("h-8 text-sm", label ? "" : "flex-1")}
+            />
+            {type === "number" && (
+              <>
+                <span className="text-xs text-gray-500 whitespace-nowrap">
+                  {isPercentage ? "%" : "px"}
+                </span>
+                <div className="flex items-center gap-0">
+                  <button
+                    onMouseDown={(e) => {
+                      e.preventDefault();
+                      decrementValue();
+                      inputRef.current?.focus();
+                    }}
+                    className="px-1.5 py-1 hover:bg-gray-200 active:bg-gray-300 rounded-l text-xs font-semibold transition-colors"
+                    title="Decrease (or use Down arrow)"
+                  >
+                    ▼
+                  </button>
+                  <button
+                    onMouseDown={(e) => {
+                      e.preventDefault();
+                      incrementValue();
+                      inputRef.current?.focus();
+                    }}
+                    className="px-1.5 py-1 hover:bg-gray-200 active:bg-gray-300 rounded-r text-xs font-semibold transition-colors"
+                    title="Increase (or use Up arrow)"
+                  >
+                    ▲
+                  </button>
+                </div>
+              </>
+            )}
+          </div>
+        )}
+      </div>
+    );
+  };
+=======
   React.useEffect(() => {
     // Cleanup debounce timer on unmount
     return () => {
@@ -311,6 +521,7 @@ export const ElementStylePanel: React.FC<ElementStylePanelProps> = ({
       },
     []
   );
+>>>>>>> main
 
   if (!component) {
     return (
@@ -395,7 +606,12 @@ export const ElementStylePanel: React.FC<ElementStylePanelProps> = ({
                 unit={sizingUnits.width}
                 onUnitChange={(unit) => handleUnitChange("width", unit)}
                 placeholder="100"
+<<<<<<< ai_main_4b439789f712
+                max={100}
+                isPercentage={true}
+=======
                 property="width"
+>>>>>>> main
               />
               <SizingInput
                 label="Height"
@@ -404,7 +620,11 @@ export const ElementStylePanel: React.FC<ElementStylePanelProps> = ({
                 unit={sizingUnits.height}
                 onUnitChange={(unit) => handleUnitChange("height", unit)}
                 placeholder="auto"
+<<<<<<< ai_main_4b439789f712
+                max={999}
+=======
                 property="height"
+>>>>>>> main
               />
               <SizingInput
                 label="Font Size"
@@ -413,7 +633,11 @@ export const ElementStylePanel: React.FC<ElementStylePanelProps> = ({
                 unit={sizingUnits.fontSize}
                 onUnitChange={(unit) => handleUnitChange("fontSize", unit)}
                 placeholder="16"
+<<<<<<< ai_main_4b439789f712
+                max={999}
+=======
                 property="fontSize"
+>>>>>>> main
               />
             </>
           )}
@@ -423,22 +647,147 @@ export const ElementStylePanel: React.FC<ElementStylePanelProps> = ({
         <div>
           <SectionHeader title="Spacing" section="spacing" />
           {expandedSections.spacing && (
-            <>
-              <StyleInput
-                label="Padding (px)"
-                value={styles.padding}
-                onChange={(value) => handleStyleChange("padding", value)}
-                type="number"
-                placeholder="16"
-              />
-              <StyleInput
-                label="Margin (px)"
-                value={styles.margin}
-                onChange={(value) => handleStyleChange("margin", value)}
-                type="number"
-                placeholder="0"
-              />
-            </>
+            <div className="px-4 py-4 space-y-6 bg-gray-50">
+              {/* Padding Section */}
+              <div>
+                <div className="flex items-center justify-between mb-3">
+                  <label className="text-xs font-semibold text-gray-700 flex items-center gap-1">
+                    Padding
+                    <span className="text-gray-400 text-xs">ⓘ</span>
+                  </label>
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={spacing.groupPadding}
+                      onChange={handleGroupPaddingToggle}
+                      className="w-4 h-4"
+                    />
+                    <span className="text-xs text-gray-600">Group sides</span>
+                  </label>
+                </div>
+
+                {spacing.groupPadding ? (
+                  <StyleInput
+                    label=""
+                    value={styles.paddingTop}
+                    onChange={(value) => {
+                      handleStyleChange("paddingTop", value);
+                      handleStyleChange("paddingRight", value);
+                      handleStyleChange("paddingBottom", value);
+                      handleStyleChange("paddingLeft", value);
+                    }}
+                    type="number"
+                    placeholder="0"
+                    max={200}
+                  />
+                ) : (
+                  <div className="grid grid-cols-2 gap-3">
+                    <StyleInput
+                      label="Top"
+                      value={styles.paddingTop}
+                      onChange={(value) => handleStyleChange("paddingTop", value)}
+                      type="number"
+                      placeholder="0"
+                      max={200}
+                    />
+                    <StyleInput
+                      label="Right"
+                      value={styles.paddingRight}
+                      onChange={(value) => handleStyleChange("paddingRight", value)}
+                      type="number"
+                      placeholder="0"
+                      max={200}
+                    />
+                    <StyleInput
+                      label="Bottom"
+                      value={styles.paddingBottom}
+                      onChange={(value) => handleStyleChange("paddingBottom", value)}
+                      type="number"
+                      placeholder="0"
+                      max={200}
+                    />
+                    <StyleInput
+                      label="Left"
+                      value={styles.paddingLeft}
+                      onChange={(value) => handleStyleChange("paddingLeft", value)}
+                      type="number"
+                      placeholder="0"
+                      max={200}
+                    />
+                  </div>
+                )}
+              </div>
+
+              {/* Margin Section */}
+              <div>
+                <div className="flex items-center justify-between mb-3">
+                  <label className="text-xs font-semibold text-gray-700 flex items-center gap-1">
+                    Margin
+                    <span className="text-gray-400 text-xs">ⓘ</span>
+                  </label>
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={spacing.groupMargin}
+                      onChange={handleGroupMarginToggle}
+                      className="w-4 h-4"
+                    />
+                    <span className="text-xs text-gray-600">Group sides</span>
+                  </label>
+                </div>
+
+                {spacing.groupMargin ? (
+                  <StyleInput
+                    label=""
+                    value={styles.marginTop}
+                    onChange={(value) => {
+                      handleStyleChange("marginTop", value);
+                      handleStyleChange("marginRight", value);
+                      handleStyleChange("marginBottom", value);
+                      handleStyleChange("marginLeft", value);
+                    }}
+                    type="number"
+                    placeholder="0"
+                    max={200}
+                  />
+                ) : (
+                  <div className="grid grid-cols-2 gap-3">
+                    <StyleInput
+                      label="Top"
+                      value={styles.marginTop}
+                      onChange={(value) => handleStyleChange("marginTop", value)}
+                      type="number"
+                      placeholder="0"
+                      max={200}
+                    />
+                    <StyleInput
+                      label="Right"
+                      value={styles.marginRight}
+                      onChange={(value) => handleStyleChange("marginRight", value)}
+                      type="number"
+                      placeholder="0"
+                      max={200}
+                    />
+                    <StyleInput
+                      label="Bottom"
+                      value={styles.marginBottom}
+                      onChange={(value) => handleStyleChange("marginBottom", value)}
+                      type="number"
+                      placeholder="0"
+                      max={200}
+                    />
+                    <StyleInput
+                      label="Left"
+                      value={styles.marginLeft}
+                      onChange={(value) => handleStyleChange("marginLeft", value)}
+                      type="number"
+                      placeholder="0"
+                      max={200}
+                    />
+                  </div>
+                )}
+              </div>
+            </div>
           )}
         </div>
 
@@ -453,6 +802,7 @@ export const ElementStylePanel: React.FC<ElementStylePanelProps> = ({
                 onChange={(value) => handleStyleChange("borderWidth", value)}
                 type="number"
                 placeholder="0"
+                max={50}
               />
               <StyleInput
                 label="Border Radius (px)"
@@ -460,6 +810,7 @@ export const ElementStylePanel: React.FC<ElementStylePanelProps> = ({
                 onChange={(value) => handleStyleChange("borderRadius", value)}
                 type="number"
                 placeholder="0"
+                max={200}
               />
             </>
           )}
