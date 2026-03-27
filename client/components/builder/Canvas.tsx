@@ -30,6 +30,7 @@ export const BuilderCanvas: React.FC<BuilderCanvasProps> = ({ onBack, templateId
   const [isPreviewMode, setIsPreviewMode] = React.useState(false);
   const [previewDevice, setPreviewDevice] = React.useState<PreviewDevice>("desktop");
   const [selectedComponentId, setSelectedComponentId] = React.useState<string | null>(null);
+  const [pendingScrollComponentId, setPendingScrollComponentId] = React.useState<string | null>(null);
   const { toast } = useToast();
 
   const layoutConfig = initialLayout
@@ -56,6 +57,26 @@ export const BuilderCanvas: React.FC<BuilderCanvasProps> = ({ onBack, templateId
 
   const selectedComponent = selectedComponentId ? findComponentById(selectedComponentId) : null;
   const currentPreviewPreset = PREVIEW_DEVICE_PRESETS[previewDevice];
+
+  React.useEffect(() => {
+    if (!pendingScrollComponentId) return;
+
+    const animationFrame = window.requestAnimationFrame(() => {
+      const element = document.querySelector(`[data-builder-component-id="${pendingScrollComponentId}"]`);
+
+      if (element instanceof HTMLElement) {
+        element.scrollIntoView({ behavior: "smooth", block: "end" });
+        setPendingScrollComponentId(null);
+      }
+    });
+
+    return () => window.cancelAnimationFrame(animationFrame);
+  }, [layout, pendingScrollComponentId]);
+
+  const handleComponentAdded = (newId: string) => {
+    setSelectedComponentId(newId);
+    setPendingScrollComponentId(newId);
+  };
 
   const handleCopyLayout = async () => {
     try {
@@ -86,7 +107,7 @@ export const BuilderCanvas: React.FC<BuilderCanvasProps> = ({ onBack, templateId
         moveComponent(item.id, null, layout.length);
       } else {
         // Adding new
-        addComponent(item.type, null, layout.length);
+        addComponent(item.type, null, layout.length, handleComponentAdded);
       }
     },
     collect: (monitor) => ({
@@ -276,9 +297,7 @@ export const BuilderCanvas: React.FC<BuilderCanvasProps> = ({ onBack, templateId
                     onRemove={removeComponent}
                     onMove={moveComponent}
                     onAdd={(type, parentId, idx) => {
-                      addComponent(type, parentId, idx, (newId) => {
-                        setSelectedComponentId(newId);
-                      });
+                      addComponent(type, parentId, idx, handleComponentAdded);
                     }}
                     onDuplicate={duplicateComponent}
                     onSelect={setSelectedComponentId}

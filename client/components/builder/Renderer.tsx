@@ -234,6 +234,7 @@ export const ComponentRenderer: React.FC<RendererProps> = ({
     return (
       <div
         ref={drag}
+        data-builder-component-id={component.id}
         onClick={(e) => {
           // Allow contentEditable elements (like buttons) to handle their own clicks
           const target = e.target as HTMLElement;
